@@ -27,11 +27,20 @@ public class MainActivity extends AppCompatActivity {
         Log.v("brad", "after");
     }
 
+    public void test2(View view) {
+        if (myAsyncTask!= null && !myAsyncTask.isCancelled()) {
+            myAsyncTask.cancel(false);
+        }
+
+    }
+
     private class MyAsyncTask extends AsyncTask<String, Integer, String>{
 
         @Override
         protected String doInBackground(String... names) {
             Log.v("brad", "doInBackground");
+
+            String ret = "OK";
 
             for (String name : names){
                 Log.v("brad", "Hello, " + name);
@@ -40,15 +49,24 @@ public class MainActivity extends AppCompatActivity {
                 int rand = (int)(Math.random()*49+1);
                 publishProgress(rand, rand*10);
 
+//                if (isCancelled()){
+//                    ret = "cancel";
+//                    break;
+//                }
+
+
                 try {
                     Thread.sleep(1*1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.v("brad", "here: interrupt");
+                    ret = "cancel2";
+                    //e.printStackTrace();
+                    break;
                 }
             }
 
 
-            return "OK";
+            return ret;
         }
 
         @Override
